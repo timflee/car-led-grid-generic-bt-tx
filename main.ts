@@ -7,14 +7,14 @@ input.onButtonPressed(Button.A, function () {
 })
 input.onButtonPressed(Button.AB, function () {
     radio.sendString("updateLeds")
-    music.play(music.builtinPlayableSoundEffect(soundExpression.twinkle), music.PlaybackMode.UntilDone)
+    music.play(music.builtinPlayableSoundEffect(soundExpression.yawn), music.PlaybackMode.UntilDone)
 })
 input.onButtonPressed(Button.B, function () {
     for (let index = 0; index <= 7; index++) {
         radio.sendValue(picsB[modes.indexOf(currentMode)][index], index)
     }
     radio.sendString("updateLeds")
-    music.play(music.builtinPlayableSoundEffect(soundExpression.happy), music.PlaybackMode.UntilDone)
+    music.play(music.builtinPlayableSoundEffect(soundExpression.slide), music.PlaybackMode.UntilDone)
 })
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
@@ -133,7 +133,7 @@ initVariables()
 radio.setGroup(1)
 basic.showString("" + (currentMode))
 radio.sendString("ledMapTx")
-music.setVolume(127)
+music.setVolume(50)
 music.setTempo(500)
 basic.forever(function () {
 	
