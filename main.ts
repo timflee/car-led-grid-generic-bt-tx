@@ -11,14 +11,25 @@ input.onButtonPressed(Button.A, function () {
         ACK = false
     }
     while (!(ACK)) {
-        lastSentString = "updateLeds"
+        lastSentString = "flashLeds"
         radio.sendString(lastSentString)
         basic.pause(100)
     }
     ACK = false
 })
 input.onButtonPressed(Button.AB, function () {
-    radio.sendValue("bright", 30)
+    if (brightnessHigh) {
+        lastSentValue = 10
+    } else {
+        lastSentValue = 50
+    }
+    while (!(ACK)) {
+        lastSentName = "bright"
+        radio.sendValue(lastSentName, lastSentValue)
+        basic.pause(100)
+    }
+    ACK = false
+    brightnessHigh = !(brightnessHigh)
 })
 radio.onReceivedString(function (receivedString) {
     if (receivedString == lastSentString) {
@@ -38,7 +49,7 @@ input.onButtonPressed(Button.B, function () {
         ACK = false
     }
     while (!(ACK)) {
-        lastSentString = "updateLeds"
+        lastSentString = "flashLeds"
         radio.sendString(lastSentString)
         basic.pause(100)
     }
@@ -54,6 +65,7 @@ input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     basic.showString("" + (currentMode))
 })
 function initVariables () {
+    brightnessHigh = false
     lastSentValue = 0
     lastSentName = ""
     lastSentString = ""
@@ -164,6 +176,7 @@ function initVariables () {
 let pic: string[] = []
 let messageRx = false
 let picsB: string[][] = []
+let brightnessHigh = false
 let lastSentString = ""
 let lastSentValue = 0
 let picsA: string[][] = []
