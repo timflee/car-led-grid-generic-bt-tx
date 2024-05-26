@@ -1,34 +1,57 @@
 input.onButtonPressed(Button.A, function () {
+    radio.sendString("ledMapTx")
+    basic.pause(200)
     for (let index = 0; index <= 7; index++) {
-        radio.sendValue(picsA[modes.indexOf(currentMode)][index], index)
+        while (!(ACK)) {
+            lastSentName = picsA[_py.py_array_index(modes, currentMode)][index]
+            lastSentValue = index
+            radio.sendValue(lastSentName, lastSentValue)
+            basic.pause(100)
+        }
+        ACK = false
     }
+    basic.pause(200)
     radio.sendString("updateLeds")
-    music.play(music.builtinPlayableSoundEffect(soundExpression.hello), music.PlaybackMode.UntilDone)
 })
 input.onButtonPressed(Button.AB, function () {
-    radio.sendString("updateLeds")
-    music.play(music.builtinPlayableSoundEffect(soundExpression.yawn), music.PlaybackMode.UntilDone)
+    radio.sendValue("bright", 30)
 })
 input.onButtonPressed(Button.B, function () {
-    for (let index = 0; index <= 7; index++) {
-        radio.sendValue(picsB[modes.indexOf(currentMode)][index], index)
+    radio.sendString("ledMapTx")
+    basic.pause(200)
+    for (let index2 = 0; index2 <= 7; index2++) {
+        while (!(ACK)) {
+            lastSentName = picsB[_py.py_array_index(modes, currentMode)][index2]
+            lastSentValue = index2
+            radio.sendValue(lastSentName, lastSentValue)
+            basic.pause(100)
+        }
+        ACK = false
     }
+    basic.pause(200)
     radio.sendString("updateLeds")
-    music.play(music.builtinPlayableSoundEffect(soundExpression.slide), music.PlaybackMode.UntilDone)
+})
+radio.onReceivedValue(function (name, value) {
+    if (name == lastSentName && value == lastSentValue) {
+        ACK = true
+    }
 })
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-    music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
-    currentMode = modes[(modes.indexOf(currentMode) + 1) % modes.length]
+    currentMode = modes[(_py.py_array_index(modes, currentMode) + 1) % modes.length]
     basic.showString("" + (currentMode))
 })
 function initVariables () {
+    lastSentValue = 0
+    lastSentName = ""
+    ACK = false
+    messageRx = false
     modes = [
     "E",
     "S",
     "Z",
     "T"
     ]
-    currentMode = modes[0]
+    currentMode = modes[3]
     pic = [
     "rrrrrrrr",
     "oooooooo",
@@ -41,48 +64,58 @@ function initVariables () {
     ]
     picsA = [
     [
-    "rrrrrrrr",
-    "oooooooo",
-    "yyyyyyyy",
-    "gggggggg",
-    "bbbbbbbb",
-    "iiiiiiii",
-    "wwwwwwww",
-    "wwwwwwww"
+    "pppppppp",
+    "piiiiiip",
+    "pibbbbip",
+    "pibggbip",
+    "pibggbip",
+    "pibbbbip",
+    "piiiiiip",
+    "pppppppp"
     ],
     [
-    "oooooooo",
-    "rrrrrrrr",
-    "yyyyyyyy",
-    "gggggggg",
-    "bbbbbbbb",
-    "iiiiiiii",
-    "wwwwwwww",
-    "wwwwwwww"
+    "pppppppp",
+    "vvvvvvvv",
+    "pppppppp",
+    "vvvvvvvv",
+    "pppppppp",
+    "vvvvvvvv",
+    "pppppppp",
+    "vvvvvvvv"
     ],
     [
-    "yyyyyyyy",
-    "oooooooo",
-    "rrrrrrrr",
-    "gggggggg",
     "bbbbbbbb",
-    "iiiiiiii",
-    "wwwwwwww",
-    "wwwwwwww"
+    "bbbbbbbb",
+    "bbbbbbbb",
+    "bbbbbbbb",
+    "bbbbbbbb",
+    "bbbbbbbb",
+    "bbbbbbbb",
+    "bbbbbbbb"
     ],
     [
-    "gggggggg",
-    "oooooooo",
-    "yyyyyyyy",
-    "rrrrrrrr",
-    "bbbbbbbb",
-    "iiiiiiii",
-    "wwwwwwww",
-    "wwwwwwww"
+    "00oooo00",
+    "0o0000o0",
+    "o0g00g0o",
+    "o000000o",
+    "o0g00g0o",
+    "o00gg00o",
+    "0o0000o0",
+    "00oooo00"
     ]
     ]
     picsB = [
     [
+    "roygbvpw",
+    "roygbvpw",
+    "roygbvpw",
+    "roygbvpw",
+    "roygbvpw",
+    "roygbvpw",
+    "roygbvpw",
+    "roygbvpw"
+    ],
+    [
     "rrrrrrrr",
     "oooooooo",
     "yyyyyyyy",
@@ -93,16 +126,6 @@ function initVariables () {
     "wwwwwwww"
     ],
     [
-    "oooooooo",
-    "rrrrrrrr",
-    "yyyyyyyy",
-    "gggggggg",
-    "bbbbbbbb",
-    "iiiiiiii",
-    "vvvvvvvv",
-    "wwwwwwww"
-    ],
-    [
     "yyyyyyyy",
     "oooooooo",
     "rrrrrrrr",
@@ -113,26 +136,31 @@ function initVariables () {
     "wwwwwwww"
     ],
     [
-    "gggggggg",
-    "oooooooo",
-    "yyyyyyyy",
-    "rrrrrrrr",
-    "bbbbbbbb",
-    "iiiiiiii",
-    "vvvvvvvv",
-    "wwwwwwww"
+    "00ooo000",
+    "0o000o00",
+    "o0w0w0o0",
+    "o00000o0",
+    "o0g0g0o0",
+    "0o0g0o00",
+    "00ooo000",
+    "00000000"
     ]
     ]
 }
 let pic: string[] = []
+let messageRx = false
 let picsB: string[][] = []
-let modes: string[] = []
+let lastSentValue = 0
 let picsA: string[][] = []
+let lastSentName = ""
+let ACK = false
 let currentMode = ""
+let modes : string[] = []
 initVariables()
 radio.setGroup(1)
-basic.showString("" + (currentMode))
 radio.sendString("ledMapTx")
+radio.sendString("updateLeds")
+basic.showString("" + (currentMode))
 music.setVolume(50)
 music.setTempo(500)
 basic.forever(function () {
