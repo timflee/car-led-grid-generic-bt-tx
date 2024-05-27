@@ -1,4 +1,7 @@
 input.onButtonPressed(Button.A, function () {
+    music.play(music.tonePlayable(494, music.beat(BeatFraction.Sixteenth)), music.PlaybackMode.InBackground)
+    radio.sendValue("falshN", 20)
+    radio.sendValue("falshP", 250)
     radio.sendString("ledMapTx")
     basic.pause(200)
     for (let index = 0; index <= 7; index++) {
@@ -37,6 +40,9 @@ radio.onReceivedString(function (receivedString) {
     }
 })
 input.onButtonPressed(Button.B, function () {
+    music.play(music.tonePlayable(494, music.beat(BeatFraction.Sixteenth)), music.PlaybackMode.InBackground)
+    radio.sendValue("falshN", 20)
+    radio.sendValue("falshP", 250)
     radio.sendString("ledMapTx")
     basic.pause(200)
     for (let index2 = 0; index2 <= 7; index2++) {
@@ -61,6 +67,7 @@ radio.onReceivedValue(function (name, value) {
     }
 })
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+    music.play(music.tonePlayable(494, music.beat(BeatFraction.Sixteenth)), music.PlaybackMode.InBackground)
     currentMode = modes[(_py.py_array_index(modes, currentMode) + 1) % modes.length]
     basic.showString("" + (currentMode))
 })
@@ -187,8 +194,7 @@ let currentMode = ""
 initVariables()
 radio.setGroup(1)
 basic.showString("" + (currentMode))
-music.setVolume(50)
-music.setTempo(500)
+music.setVolume(255)
 basic.forever(function () {
 	
 })
